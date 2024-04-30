@@ -10,15 +10,17 @@ class ChallengesSpec extends AnyFreeSpec with Matchers {
       val expected1 = 10
       val testVals2 = List(0)
       val expected2 = 0
-      val testVals3 = List()
-      val expected3 = 0
-      val testVals4 = 0 to 99
-      val expected4 = testVals4.length * (testVals4.start + testVals4.end) / 2
+      val testVals3 = 0 to 99
+      val expected3 = testVals3.length * (testVals3.start + testVals3.end) / 2
 
       calculateSum(testVals1) shouldEqual expected1
       calculateSum(testVals2) shouldEqual expected2
-      calculateSum(testVals3) shouldEqual expected3
-      calculateSum(testVals4.toList) shouldEqual expected4
+      calculateSum(testVals3.toList) shouldEqual expected3
+    }
+
+    "should return 0 for an empty list" in {
+      // https://stackoverflow.com/questions/5981850/scala-nil-vs-list
+      calculateSum(Nil) shouldEqual 0
     }
   }
 
