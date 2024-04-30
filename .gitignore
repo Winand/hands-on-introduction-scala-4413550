@@ -1,3 +1,5 @@
+# https://alvinalexander.com/source-code/scala/sample-gitignore-file-scala-sbt-intellij-eclipse/
+
 # bloop and metals
 .bloop
 .bsp
@@ -24,4 +26,5 @@ target/
 # general
 *.class
 
-# https://alvinalexander.com/source-code/scala/sample-gitignore-file-scala-sbt-intellij-eclipse/
+###################################
+src/test/scala/resources/output.txt
