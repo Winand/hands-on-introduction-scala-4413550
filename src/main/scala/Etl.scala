@@ -24,16 +24,17 @@ object Etl {
     def load(data: List[Int], output: String): Either[Etl.EtlError, Unit] =
       FileUtils.load(data, output)
 
-  def etl[A, B](inputFileName: String, outputFileName: String)(using
+  def etl[A, B](
+      config: EtlConfig,
       etlImpl: Etl[A, B]
   ): Either[EtlError, Unit] = {
     // If any operation inside for-expression results in a Left (EtlError),
     // this first Left is returned from the function.
     // Otherwise Right is being processed and Unit is returned.
     for
-      extracted <- etlImpl.extract(inputFileName)
+      extracted <- etlImpl.extract(config.inputFilePath)
       transformed <- etlImpl.transform(extracted)
-      _ <- etlImpl.load(transformed, outputFileName)
+      _ <- etlImpl.load(transformed, config.outputFilePath)
     yield ()
   }
 }
