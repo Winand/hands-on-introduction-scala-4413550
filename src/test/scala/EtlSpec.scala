@@ -6,6 +6,7 @@ import scala.util.Try
 import scala.io.Source
 import scala.util.Using
 import scala.util.Success
+import Etl.etl
 
 class EtlSpec extends AnyFreeSpec with Matchers {
   "etl" - {
@@ -13,7 +14,15 @@ class EtlSpec extends AnyFreeSpec with Matchers {
       val input: String = "src/test/scala/resources/input.txt"
       val output: String = "src/test/scala/resources/output.txt"
       val expectedFileContents = List("hello world")
-      etl(input, output)
+      etl(input, output)(using Etl.StringImpl)
+      readFile(output) shouldEqual Success(expectedFileContents)
+    }
+
+    "transforms a text file by doubling all integers and saves this to a new file" in {
+      val input: String = "src/test/scala/resources/input2.txt"
+      val output: String = "src/test/scala/resources/output2.txt"
+      val expectedFileContents = List("0", "2", "4", "6", "8", "10")
+      etl(input, output)(using Etl.IntImpl)
       readFile(output) shouldEqual Success(expectedFileContents)
     }
   }

@@ -27,4 +27,4 @@ target/
 *.class
 
 ###################################
-src/test/scala/resources/output.txt
+src/test/scala/resources/output*.txt
