@@ -104,7 +104,7 @@ class ChallengesSpec extends AnyFreeSpec with Matchers {
   "Notifications" - {
     "EmailNotification" in {
       val emailAddress = "user@example.com"
-      val emailNotification = EmailNotification(emailAddress)
+      val emailNotification = EmailNotification(emailAddress, Priority.Medium)
       val message = "Hello, this is an email"
       val formattedMessage = emailNotification.formatMessage(message)
       val result = emailNotification.sendNotification(message)
@@ -114,7 +114,7 @@ class ChallengesSpec extends AnyFreeSpec with Matchers {
     }
     "SMSNotification" in {
       val phoneNumber = "07525015566"
-      val smsNotification = SMSNotification(phoneNumber)
+      val smsNotification = SMSNotification(phoneNumber, Priority.High)
       val message = "Hello, this is an SMS"
       val formattedMessage = smsNotification.formatMessage(message)
       val result = smsNotification.sendNotification(message)

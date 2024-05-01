@@ -83,17 +83,14 @@ object Challenges {
     def formatMessage(message: String): String = s"Message: $message"
   }
 
-  final case class EmailNotification(emailAddress: String)
+  final case class EmailNotification(emailAddress: String, priority: Priority)
       extends Notification {
-    val priority: Priority = Priority.Medium
-
     def sendNotification(message: String): String =
       s"Sending email to $emailAddress with message: $message"
   }
 
-  final case class SMSNotification(phoneNumber: String) extends Notification {
-    val priority: Priority = Priority.High
-
+  final case class SMSNotification(phoneNumber: String, priority: Priority)
+      extends Notification {
     def sendNotification(message: String): String =
       s"Sending SMS to $phoneNumber: $message"
   }
