@@ -1,3 +1,7 @@
+/*
+  https://pureconfig.github.io/docs/scala-3-derivation.html
+ */
+
 import pureconfig.ConfigReader
 import pureconfig.generic.derivation.default.derived
 import pureconfig.generic.derivation.EnumConfigReader
