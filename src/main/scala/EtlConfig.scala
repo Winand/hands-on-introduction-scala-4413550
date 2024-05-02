@@ -7,7 +7,7 @@ import pureconfig.generic.derivation.default.derived
 import pureconfig.generic.derivation.EnumConfigReader
 
 enum EtlImpl derives EnumConfigReader:
-  case StringImpl, IntImpl
+  case StringImpl, IntImpl, JsonImpl
 
 final case class EtlConfig(
     inputFilePath: String,

@@ -18,19 +18,33 @@ import java.nio.file.Path
 class EtlSpec extends AnyFreeSpec with Matchers with BeforeAndAfterAll {
   val stringInput = "src/test/resources/input.txt"
   val intInput = "src/test/resources/input2.txt"
+  val jsonInput = "src/test/resources/input3.txt"
   val stringOutput = "src/test/resources/output.txt"
   val intOutput = "src/test/resources/output2.txt"
+  val jsonOutput = "src/test/resources/output3.txt"
+
+  val inputJson: String = """
+    |[
+    |{"id": 1, "name": "bola", "age": 65},
+    |{"id": 2, "name": "mary", "age": 15}
+    |]
+    """.stripMargin
 
   override def beforeAll() =
     writeTestInputFile(stringInput, "HELLO WORLD")
     writeTestInputFile(intInput, "0\n1\n2\n3\n4\n5\n")
+    writeTestInputFile(jsonInput, inputJson)
 
   override def afterAll() =
     // File(...).delete doesn't throw error
-    Files.delete(Path.of(stringInput))
-    Files.delete(Path.of(intInput))
-    Files.delete(Path.of(stringOutput))
-    Files.delete(Path.of(intOutput))
+    List(
+      stringInput,
+      intInput,
+      jsonInput,
+      stringOutput,
+      intOutput,
+      jsonOutput
+    ).foreach(filePath => Files.delete(Path.of(filePath)))
 
   "etl" - {
     "transforms a text file by making all the text lowercase and saving this to a new file" in {
@@ -41,6 +55,11 @@ class EtlSpec extends AnyFreeSpec with Matchers with BeforeAndAfterAll {
     "transforms a text file by doubling all integers and saves this to a new file" in {
       val expected = List("0", "2", "4", "6", "8", "10")
       runIntegratedTest("int-test", Etl.IntImpl, expected)
+    }
+
+    "transforms a json file by removing all users under the age of 18" in {
+      val expected = List("User(1,bola,65)")
+      runIntegratedTest("json-test", Etl.JsonImpl, expected)
     }
 
     "outputs an extract error if the input file path does not exist" in {
