@@ -9,8 +9,29 @@ import scala.util.Success
 import Etl.{etl, Etl, EtlError}
 import Etl.EtlError._
 import pureconfig.ConfigSource
+import org.scalatest.BeforeAndAfterAll
+import java.io.File
+import java.io.FileWriter
+import java.nio.file.Files
+import java.nio.file.Path
 
-class EtlSpec extends AnyFreeSpec with Matchers {
+class EtlSpec extends AnyFreeSpec with Matchers with BeforeAndAfterAll {
+  val stringInput = "src/test/resources/input.txt"
+  val intInput = "src/test/resources/input2.txt"
+  val stringOutput = "src/test/resources/output.txt"
+  val intOutput = "src/test/resources/output2.txt"
+
+  override def beforeAll() =
+    writeTestInputFile(stringInput, "HELLO WORLD")
+    writeTestInputFile(intInput, "0\n1\n2\n3\n4\n5\n")
+
+  override def afterAll() =
+    // File(...).delete doesn't throw error
+    Files.delete(Path.of(stringInput))
+    Files.delete(Path.of(intInput))
+    Files.delete(Path.of(stringOutput))
+    Files.delete(Path.of(intOutput))
+
   "etl" - {
     "transforms a text file by making all the text lowercase and saving this to a new file" in {
       val expected = List("hello world")
@@ -64,4 +85,10 @@ class EtlSpec extends AnyFreeSpec with Matchers {
     case Left(e)       => fail(s"Failed to load test config: $e")
     case Right(config) => etl(config, etlImpl) shouldEqual Left(error)
 
+  private def writeTestInputFile(path: String, contents: String) =
+    val writer = FileWriter(File(path))
+    try
+      writer.write(contents)
+    finally
+      writer.close
 }
